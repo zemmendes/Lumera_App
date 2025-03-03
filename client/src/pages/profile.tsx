@@ -77,7 +77,10 @@ export default function ProfilePage() {
 
       const { url } = await res.json();
       form.setValue("avatar", url);
-      
+
+      // Immediately update the profile with the new avatar URL
+      updateProfileMutation.mutate({ ...form.getValues(), avatar: url });
+
       toast({
         title: "Image uploaded",
         description: "Your profile picture has been updated.",
@@ -102,8 +105,8 @@ export default function ProfilePage() {
         <CardContent>
           <div className="mb-6 flex items-center gap-4">
             <Avatar className="h-24 w-24">
-              <AvatarImage src={form.watch("avatar")} />
-              <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+              <AvatarImage src={form.watch("avatar")} alt={user.name} />
+              <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
             </Avatar>
             <div>
               <input

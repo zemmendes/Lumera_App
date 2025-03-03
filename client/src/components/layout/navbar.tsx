@@ -45,8 +45,8 @@ export default function Navbar() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center gap-2">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={user.avatar || "https://images.unsplash.com/photo-1507679799987-c73779587ccf"} />
-                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                    <AvatarImage src={user.avatar} alt={user.name} />
+                    <AvatarFallback>{user.name?.charAt(0)?.toUpperCase()}</AvatarFallback>
                   </Avatar>
                   <span className="hidden md:inline-block">{user.name}</span>
                   <ChevronDown className="h-4 w-4" />
