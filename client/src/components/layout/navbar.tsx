@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ChevronDown, LayoutDashboard, Megaphone, LogOut } from "lucide-react";
+import { ChevronDown, LayoutDashboard, Megaphone, LogOut, UserCircle } from "lucide-react";
 
 export default function Navbar() {
   const { user, logoutMutation } = useAuth();
@@ -23,7 +23,7 @@ export default function Navbar() {
             <Link href="/">
               <a className="text-xl font-bold">Lumera</a>
             </Link>
-            
+
             <div className="hidden md:flex items-center gap-6">
               <Link href="/">
                 <a className="flex items-center gap-2 text-sm font-medium">
@@ -53,6 +53,14 @@ export default function Navbar() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem asChild>
+                  <Link href="/profile">
+                    <a className="flex items-center">
+                      <UserCircle className="mr-2 h-4 w-4" />
+                      <span>Profile</span>
+                    </a>
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem className="text-destructive" onClick={() => logoutMutation.mutate()}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
