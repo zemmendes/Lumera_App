@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -44,20 +44,16 @@ export default function AuthPage() {
   });
 
   return (
-    <div className="min-h-screen flex bg-zinc-900/95">
+    <div className="min-h-screen flex">
       <div className="flex-1 flex items-center justify-center p-8">
-        <Card className="w-full max-w-md bg-black/40 backdrop-blur">
+        <Card className="w-full max-w-md">
           <CardHeader>
-            <div className="flex justify-center mb-8">
-              <img src="/attached_assets/Logo.png" alt="Lumera" className="h-16 w-auto" />
-            </div>
-            <CardDescription className="text-center text-lg">
-              Your gateway to a brighter digital experience
-            </CardDescription>
+            <CardTitle>Welcome to Lumera</CardTitle>
+            <CardDescription>Connect with the right influencers for your brand</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "login" | "register")}>
-              <TabsList className="grid w-full grid-cols-2 mb-8">
+              <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="login">Login</TabsTrigger>
                 <TabsTrigger value="register">Register</TabsTrigger>
               </TabsList>
@@ -72,7 +68,7 @@ export default function AuthPage() {
                         <FormItem>
                           <FormLabel>Username</FormLabel>
                           <FormControl>
-                            <Input {...field} className="bg-black/20" />
+                            <Input {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -85,13 +81,13 @@ export default function AuthPage() {
                         <FormItem>
                           <FormLabel>Password</FormLabel>
                           <FormControl>
-                            <Input type="password" {...field} className="bg-black/20" />
+                            <Input type="password" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={loginMutation.isPending}>
+                    <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
                       {loginMutation.isPending ? "Logging in..." : "Login"}
                     </Button>
                   </form>
@@ -109,7 +105,7 @@ export default function AuthPage() {
                           <FormLabel>I am a</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger className="bg-black/20">
+                              <SelectTrigger>
                                 <SelectValue placeholder="Select your role" />
                               </SelectTrigger>
                             </FormControl>
@@ -129,7 +125,7 @@ export default function AuthPage() {
                         <FormItem>
                           <FormLabel>Username</FormLabel>
                           <FormControl>
-                            <Input {...field} className="bg-black/20" />
+                            <Input {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -142,7 +138,7 @@ export default function AuthPage() {
                         <FormItem>
                           <FormLabel>Password</FormLabel>
                           <FormControl>
-                            <Input type="password" {...field} className="bg-black/20" />
+                            <Input type="password" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -155,7 +151,7 @@ export default function AuthPage() {
                         <FormItem>
                           <FormLabel>Email</FormLabel>
                           <FormControl>
-                            <Input type="email" {...field} className="bg-black/20" />
+                            <Input type="email" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -168,13 +164,13 @@ export default function AuthPage() {
                         <FormItem>
                           <FormLabel>Full Name</FormLabel>
                           <FormControl>
-                            <Input {...field} className="bg-black/20" />
+                            <Input {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={registerMutation.isPending}>
+                    <Button type="submit" className="w-full" disabled={registerMutation.isPending}>
                       {registerMutation.isPending ? "Creating account..." : "Create Account"}
                     </Button>
                   </form>
@@ -184,17 +180,18 @@ export default function AuthPage() {
           </CardContent>
         </Card>
       </div>
-      <div className="hidden lg:flex flex-1 bg-black/40 backdrop-blur items-center justify-center p-8">
+      <div className="hidden lg:flex flex-1 bg-gray-100 items-center justify-center p-8">
         <div className="max-w-lg">
-          <h1 className="text-5xl font-bold mb-6 text-white">Influencie o futuro da sua empresa</h1>
-          <p className="text-lg text-blue-200 mb-8">
+          <h1 className="text-4xl font-bold mb-6">Amplify Your Brand's Reach</h1>
+          <p className="text-lg text-gray-600 mb-8">
             Connect with influential creators who share your vision and values. 
             Build authentic partnerships that resonate with your target audience.
           </p>
-          <div className="flex gap-4">
-            <Button size="lg" className="bg-primary hover:bg-primary/90">Get Started</Button>
-            <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10">Learn More</Button>
-          </div>
+          <img
+            src="https://images.unsplash.com/photo-1493723843671-1d655e66ac1c"
+            alt="Marketing collaboration"
+            className="rounded-lg shadow-xl"
+          />
         </div>
       </div>
     </div>
