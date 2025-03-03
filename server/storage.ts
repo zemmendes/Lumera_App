@@ -1,20 +1,24 @@
-import { InsertUser, User, Campaign, Connection, insertCampaignSchema, insertConnectionSchema } from "@shared/schema";
+import { InsertUser, User, Campaign, Connection } from "@shared/schema";
+import { users, campaigns, connections } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 import session from "express-session";
-import createMemoryStore from "memorystore";
+import connectPg from "connect-pg-simple";
+import { pool } from "./db";
 
-const MemoryStore = createMemoryStore(session);
+const PostgresSessionStore = connectPg(session);
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   getUsersByType(type: "company" | "influencer"): Promise<User[]>;
-  
+
   createCampaign(campaign: Omit<Campaign, "id">): Promise<Campaign>;
   getCampaign(id: number): Promise<Campaign | undefined>;
   getCampaignsByCompany(companyId: number): Promise<Campaign[]>;
   getActiveCampaigns(): Promise<Campaign[]>;
-  
+
   createConnection(connection: Omit<Connection, "id">): Promise<Connection>;
   getConnectionsByInfluencer(influencerId: number): Promise<Connection[]>;
   getConnectionsByCampaign(campaignId: number): Promise<Connection[]>;
@@ -23,93 +27,75 @@ export interface IStorage {
   sessionStore: session.Store;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private campaigns: Map<number, Campaign>;
-  private connections: Map<number, Connection>;
-  private currentId: number;
+export class DatabaseStorage implements IStorage {
   sessionStore: session.Store;
 
   constructor() {
-    this.users = new Map();
-    this.campaigns = new Map();
-    this.connections = new Map();
-    this.currentId = 1;
-    this.sessionStore = new MemoryStore({
-      checkPeriod: 86400000,
+    this.sessionStore = new PostgresSessionStore({
+      pool,
+      createTableIfMissing: true,
     });
   }
 
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentId++;
-    const user = { ...insertUser, id };
-    this.users.set(id, user);
+    const [user] = await db.insert(users).values(insertUser).returning();
     return user;
   }
 
   async getUsersByType(type: "company" | "influencer"): Promise<User[]> {
-    return Array.from(this.users.values()).filter(user => user.userType === type);
+    return await db.select().from(users).where(eq(users.userType, type));
   }
 
   async createCampaign(campaign: Omit<Campaign, "id">): Promise<Campaign> {
-    const id = this.currentId++;
-    const newCampaign = { ...campaign, id };
-    this.campaigns.set(id, newCampaign);
+    const [newCampaign] = await db.insert(campaigns).values(campaign).returning();
     return newCampaign;
   }
 
   async getCampaign(id: number): Promise<Campaign | undefined> {
-    return this.campaigns.get(id);
+    const [campaign] = await db.select().from(campaigns).where(eq(campaigns.id, id));
+    return campaign;
   }
 
   async getCampaignsByCompany(companyId: number): Promise<Campaign[]> {
-    return Array.from(this.campaigns.values()).filter(
-      campaign => campaign.companyId === companyId
-    );
+    return await db.select().from(campaigns).where(eq(campaigns.companyId, companyId));
   }
 
   async getActiveCampaigns(): Promise<Campaign[]> {
-    return Array.from(this.campaigns.values()).filter(
-      campaign => campaign.status === "active"
-    );
+    return await db.select().from(campaigns).where(eq(campaigns.status, "active"));
   }
 
   async createConnection(connection: Omit<Connection, "id">): Promise<Connection> {
-    const id = this.currentId++;
-    const newConnection = { ...connection, id };
-    this.connections.set(id, newConnection);
+    const [newConnection] = await db.insert(connections).values(connection).returning();
     return newConnection;
   }
 
   async getConnectionsByInfluencer(influencerId: number): Promise<Connection[]> {
-    return Array.from(this.connections.values()).filter(
-      conn => conn.influencerId === influencerId
-    );
+    return await db.select().from(connections).where(eq(connections.influencerId, influencerId));
   }
 
   async getConnectionsByCampaign(campaignId: number): Promise<Connection[]> {
-    return Array.from(this.connections.values()).filter(
-      conn => conn.campaignId === campaignId
-    );
+    return await db.select().from(connections).where(eq(connections.campaignId, campaignId));
   }
 
   async updateConnectionStatus(id: number, status: "accepted" | "rejected"): Promise<Connection> {
-    const connection = this.connections.get(id);
-    if (!connection) throw new Error("Connection not found");
-    const updated = { ...connection, status };
-    this.connections.set(id, updated);
+    const [updated] = await db
+      .update(connections)
+      .set({ status })
+      .where(eq(connections.id, id))
+      .returning();
+    if (!updated) throw new Error("Connection not found");
     return updated;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
