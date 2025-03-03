@@ -44,12 +44,14 @@ export default function AuthPage() {
   });
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-background">
       <div className="flex-1 flex items-center justify-center p-8">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle>Welcome to Lumera</CardTitle>
-            <CardDescription>Connect with the right influencers for your brand</CardDescription>
+            <div className="flex justify-center mb-6">
+              <img src="/attached_assets/Logo.png" alt="Lumera" className="h-12" />
+            </div>
+            <CardDescription className="text-center">Connect with the right influencers for your brand</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "login" | "register")}>
@@ -180,18 +182,20 @@ export default function AuthPage() {
           </CardContent>
         </Card>
       </div>
-      <div className="hidden lg:flex flex-1 bg-gray-100 items-center justify-center p-8">
+      <div className="hidden lg:flex flex-1 bg-black/10 backdrop-blur items-center justify-center p-8">
         <div className="max-w-lg">
-          <h1 className="text-4xl font-bold mb-6">Amplify Your Brand's Reach</h1>
-          <p className="text-lg text-gray-600 mb-8">
+          <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-primary to-primary-foreground bg-clip-text text-transparent">Amplify Your Brand's Reach</h1>
+          <p className="text-lg text-muted-foreground mb-8">
             Connect with influential creators who share your vision and values. 
             Build authentic partnerships that resonate with your target audience.
           </p>
-          <img
-            src="https://images.unsplash.com/photo-1493723843671-1d655e66ac1c"
-            alt="Marketing collaboration"
-            className="rounded-lg shadow-xl"
-          />
+          <div className="rounded-lg overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1493723843671-1d655e66ac1c"
+              alt="Marketing collaboration"
+              className="w-full object-cover rounded-lg shadow-lg"
+            />
+          </div>
         </div>
       </div>
     </div>
