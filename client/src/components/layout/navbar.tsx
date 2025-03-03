@@ -16,25 +16,25 @@ export default function Navbar() {
   if (!user) return null;
 
   return (
-    <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className="border-b border-white/10 bg-black/40 backdrop-blur supports-[backdrop-filter]:bg-black/20">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/">
               <a className="flex items-center gap-2">
-                <img src="/attached_assets/Logo.png" alt="Lumera" className="h-8" />
+                <img src="/attached_assets/Logo.png" alt="Lumera" className="h-10 w-auto" />
               </a>
             </Link>
 
             <div className="hidden md:flex items-center gap-6">
               <Link href="/">
-                <a className="flex items-center gap-2 text-sm font-medium text-foreground/60 transition-colors hover:text-foreground">
+                <a className="flex items-center gap-2 text-sm font-medium text-white/60 transition-colors hover:text-white">
                   <LayoutDashboard className="h-4 w-4" />
                   Dashboard
                 </a>
               </Link>
               <Link href="/campaigns">
-                <a className="flex items-center gap-2 text-sm font-medium text-foreground/60 transition-colors hover:text-foreground">
+                <a className="flex items-center gap-2 text-sm font-medium text-white/60 transition-colors hover:text-white">
                   <Megaphone className="h-4 w-4" />
                   Campaigns
                 </a>
