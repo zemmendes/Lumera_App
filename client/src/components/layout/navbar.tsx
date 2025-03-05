@@ -21,7 +21,7 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
             <Link href="/">
-              <a className="text-xl font-bold">Lumera</a>
+              <a className="text-xl font-bold">Lumera!</a>
             </Link>
 
             <div className="hidden md:flex items-center gap-6">
